@@ -19,6 +19,9 @@
 
 using namespace std;
 
+/**
+ This object reads and parses a csv file representing the historical prices of a stock
+ */
 class CSVParser{
 private:
     vector<CSVRow*> myRows;
@@ -47,11 +50,14 @@ public:
         readFile(filePath);
     }
     
+    //Return the specific element in the table
+    //Represent by the row and column number
     string getElement(int row, int col){
         CSVRow* currentRow = myRows[row];
         return currentRow->getData(col);
     }
     
+    //Return the number of rows in the csv file
     int getRowCount(){
         return (int) myRows.size();
     }

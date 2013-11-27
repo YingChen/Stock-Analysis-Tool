@@ -13,6 +13,9 @@
 
 using namespace std;
 
+/**
+ This is a Time object contains YEAR, MONTH, DAY infos
+ */
 class Time{
 private:
     int year;
@@ -71,6 +74,13 @@ public:
         this->year = atoi(timeInfo[2].c_str());
     }
     
+    Time(int year, int month, int day){
+        this->year = year;
+        this->month = month;
+        this->day = day;
+    }
+    
+    
     string toString(){
         string result = to_string(year);
         result.append("-");
@@ -93,6 +103,11 @@ public:
             return this->day - anotherTime->day;
     }
     
+    bool equalTo(Time* anotherTime){
+        return (this->year==anotherTime->year) && (this->month==anotherTime->month) && (this->day==anotherTime->day);
+    }
+    
+    //Tell if the current Time is in the range of {first, second}.
     bool inThisRange(Time* first, Time* second){
         return (this->compareTo(first) >= 0) && (this->compareTo(second) <=0);
     }

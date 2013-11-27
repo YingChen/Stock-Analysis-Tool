@@ -8,20 +8,19 @@
 
 #include <iostream>
 
-#include "CSVRow.h"
-#include "CSVParser.h"
-#include "Time.h"
-#include "Stock.h"
 #include "StockCenter.h"
-#include "LookUpTable.h"
-#include "WordSimilarity.h"
-#include "FileExecutor.h"
-#include "PriceEstimator.h"
+#include "Pair.h"
+
+using namespace std;
 
 int main(int argc, const char * argv[])
 {
     StockCenter* center = new StockCenter();
-    //while (true) {
+//    center->addSettingFile("settings.xml");
+//    center->openStock("GOOG");
+//    cout<<"price is "<<center->getPriceOfDay("GOOG", "11-20-13")<<endl;
+    
+    
         int getValidInput = 0;
         string validSymbol;
         
@@ -51,13 +50,20 @@ int main(int argc, const char * argv[])
         }
         
         //Download file from internet
-        string fileName = center->openStock(validSymbol);
+        string fileName = center->downloadStock(validSymbol);
         cout<<"fileName is "<<fileName<<endl;
         
         //Parse the csv file
         center->createStock(validSymbol, fileName);
         center->printAllStocks();
     
+        //Print the stock history
+        cout<<"Print the stock history"<<endl;
+        vector<Pair*> history = center->getStockHistory(validSymbol);
+        for(int i=0; i<history.size(); i++){
+            cout<<history[i]->toString()<<endl;
+        }
+
         //Get the future prices
         int numberOfDays = 7;
         vector<double> futurePrices = center->getFuturePrices(validSymbol, numberOfDays);
@@ -68,7 +74,7 @@ int main(int argc, const char * argv[])
     
         //Get the suggestion
         cout<<center->getTradeSuggestion(validSymbol)<<endl;
-    //}
+
     
     return 0;
 }

@@ -66,13 +66,21 @@ private:
         return result;
     }
     
+    string toLowerCase(string str){
+        string result = "";
+        for(int i=0; i<str.size(); i++){
+            result.push_back(tolower(str[i]));
+        }
+        return result;
+    }
+    
 public:
     WordSimilarity(){
         
     }
     
     int calculateDistance(string wordA, string wordB){
-        int distance =  LevenshteinDistance(wordA, wordB);
+        int distance =  LevenshteinDistance(toLowerCase(wordA), toLowerCase(wordB));
         //cout<<wordA << " "<<wordB << " distance is "<<distance<<endl;
         return distance;
     }

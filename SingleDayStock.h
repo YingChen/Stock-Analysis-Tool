@@ -18,6 +18,10 @@
 
 using namespace std;
 
+
+/**
+ This object represents the single-day price of one specific stock
+ */
 class SingleDayStock{
 private:
     string stockName;
@@ -78,10 +82,7 @@ public:
         result.append(to_string(this->volume));
         result.append("\n");
         return result;
-        
     }
-    
-    
 };
 
 

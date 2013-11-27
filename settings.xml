@@ -1,0 +1,9 @@
+<Settings>
+    <LookUpTable>companyList.csv</LookUpTable>
+    <Threadholds>
+        <TradeInHighRecommended>0.02</TradeInHighRecommended>
+        <TradeInRecommended>0.005</TradeInRecommended>
+        <TradeOutRecommended>-0.005</TradeOutRecommended>
+        <TradeOutHighRecommended>0.02</TradeOutHighRecommended>
+    </Threadholds>
+</Settings>

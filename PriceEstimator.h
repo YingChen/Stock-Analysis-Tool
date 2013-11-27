@@ -11,17 +11,22 @@
 
 #include "StockContainer.h"
 #include "Stock.h"
+#include "Settings.h"
 
 using namespace std;
 
+/**
+ This class helps to estimate the future price from historical price
+ */
 class PriceEstimator{
 private:
     StockContainer* stockContainer;
+    Settings* mySettings;
     
     vector<double> estimatePrice(vector<double> priceTable){
         //int tableSize = (int) priceTable.size();
         //Give initial value to coefficients
-        double a0_init = 0-priceTable[0];
+        double a0_init = (0-priceTable[0]);
         double a1_init = 0;
         double a2_init = -0.25;
         double a3_init = -0.125;
@@ -32,7 +37,7 @@ private:
         double a2_max = 0.25;
         double a3_max = 0.125;
         
-        double a0_increment = priceTable[0]/15;
+        double a0_increment = priceTable[0]/20;
         double a1_increment = 0.05;
         double a2_increment = 0.025;
         double a3_increment = 0.0125;
@@ -118,10 +123,10 @@ private:
     }
     
     string getSuggestion(double pastPrice, double futurePrice){
-        double threadhold_tradeInHighlyRecommened = 0.05;
-        double threadhold_tradeInRecommended = 0.01;
-        double threadhold_tradeOutRecommended = -0.01;
-        double threadhold_tradeOutHighlyRecommended = -0.05;
+        double threadhold_tradeInHighlyRecommened = mySettings->getThreadholdForHighlyRecommendedTradeIn();
+        double threadhold_tradeInRecommended = mySettings->getThreadholdForRecommendedTradeIn();
+        double threadhold_tradeOutRecommended = mySettings->getThreadholdForRecommendedTradeOut();
+        double threadhold_tradeOutHighlyRecommended = mySettings->getThreadholdForHighlyRecommendedTradeOut();
         
         double futurePriceChange = (futurePrice - pastPrice) / pastPrice;
         if(futurePriceChange >= threadhold_tradeInHighlyRecommened)
@@ -137,8 +142,9 @@ private:
     }
     
 public:
-    PriceEstimator(StockContainer* container){
+    PriceEstimator(StockContainer* container, Settings* setting){
         stockContainer = container;
+        mySettings = setting;
     }
     
     //Get the price of future days

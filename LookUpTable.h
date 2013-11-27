@@ -11,17 +11,22 @@
 
 #include "CSVParser.h"
 #include "WordSimilarity.h"
+#include "Settings.h"
 
 using namespace std;
 
+/**
+ This class stores the information of the <stockSymbol, companyName> pairs which are parsed from the assigned csv file
+ */
 class LookUpTable{
 private:
     WordSimilarity* ws;
     vector<string> symbols;
     vector<string> companyNames;
     
-    void init(){
+    void init(Settings* settings){
         //cout<<"Init in table"<<endl;
+        string lookUpTableName = settings->getCompanyNamesFile();
         CSVParser* parser = new CSVParser("companylist.csv");
         //cout<<"row count is "<<parser->getRowCount();
         for(int i=0; i<parser->getRowCount(); i++){
@@ -33,11 +38,13 @@ private:
     
     
 public:
-    LookUpTable(){
-        init();
+    LookUpTable(Settings* settings){
+        init(settings);
         ws = new WordSimilarity();
     }
     
+    //Return the stock symbol which is most similar to the input
+    //This is used for implicit input
     vector<string> getProximitySymbols(string input){
         int maxDistance = 9999;
         vector<int> distance;
@@ -90,11 +97,13 @@ public:
         return symbols[index];
     }
     
+    //Return the company name with the assigned stock symbol
     string getCompanyName(string symbol){
         int index = getSymbolIndex(symbol);
         return companyNames[index];
     }
     
+    //Return the stock symbol with the assigned company name
     string getSymbol(string companyName){
         int index = getCompanyNameIndex(companyName);
         return symbols[index];

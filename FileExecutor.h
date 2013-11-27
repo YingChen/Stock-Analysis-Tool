@@ -13,18 +13,23 @@
 #include <iostream>
 #include <stdio.h>
 
+#include "Settings.h"
+
 using namespace std;
 
+/**
+ This class helps to download a csv file from the target url
+ */
 class FileExecutor{
 private:
-    //string BaseFilePath = "/Users/larry/Documents/Stock/Stock/Stock/";
     string BaseUrl;
     
 public:
-    FileExecutor(){
-        BaseUrl = "http://www.google.com/finance/historical?output=csv&q=";
+    FileExecutor(Settings* settings){
+        BaseUrl = settings->getBaseurl();
     }
     
+    //Download the file with script command
     string downloadFile(string symbol){
         string url = BaseUrl;
         url.append(symbol);

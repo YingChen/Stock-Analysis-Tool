@@ -15,9 +15,14 @@
 
 #include "SingleDayStock.h"
 #include "CSVParser.h"
+#include "Time.h"
+#include "Pair.h"
 
 using namespace std;
 
+/**
+ This class contains all the information of one stock
+ */
 class Stock{
 private:
     string name;
@@ -31,6 +36,17 @@ private:
         }
     }
     
+    //Split a string by 'token'
+    vector<string> split(string input, const char token){
+        string str;
+        vector<string> result;
+        istringstream iss(input);
+        while (getline(iss,str,token)) {
+            result.push_back(str);
+        }
+        return result;
+    }
+
 public:
     Stock(string name , string filePath){
         this->name = name;
@@ -38,6 +54,7 @@ public:
         createHistory();
     }
     
+    //Print all the information of the current stock
     void printInfo(){
         cout<<"********************"<<endl;
         cout<<name<<endl;
@@ -52,16 +69,40 @@ public:
         return name;
     }
     
+    //Return the vector representing the historical prices of the stock
     vector<double> getPriceTable(){
         vector<double> table;
         for(int i=0; i<history.size(); i++){
             table.push_back(history[i]->getClosePrice());
         }
         return table;
-        
     }
     
+    //The format of the date should be like mm-dd-yy
+    //For example: 1-4-14
+    //If no such date is found, then return -1.
+    double getPriceOfTheDay(string dateInfo){
+        vector<string> splittedDateInfo = split(dateInfo, '-');
+        int month = atoi(splittedDateInfo[0].c_str());
+        int day = atoi(splittedDateInfo[1].c_str());
+        int year = atoi(splittedDateInfo[2].c_str());
+        Time* date = new Time(year,month,day);
+        
+        for(int i=0; i<history.size(); i++){
+                if(history[i]->getTime()->equalTo(date))
+                    return history[i]->getClosePrice();
+        }
+        return -1;
+    }
     
+    vector<Pair*> getStockHistory(){
+        vector<Pair*> result;
+        for(int i=0; i<history.size(); i++){
+            SingleDayStock* singleDayStock = history[i];
+            result.push_back(new Pair(singleDayStock->getTime(), singleDayStock->getClosePrice()));
+        }
+        return result;
+    }
 };
 
 

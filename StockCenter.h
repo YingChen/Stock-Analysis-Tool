@@ -18,8 +18,15 @@
 #include "LookUpTable.h"
 #include "StockContainer.h"
 #include "PriceEstimator.h"
+#include "Settings.h"
+#include "Pair.h"
 
 using namespace std;
+
+/**
+ This is the main interfaces for back-end part of the project
+ The UI should be able to accomplish all the functionalities by calling the public methods in this class
+ */
 
 class StockCenter{
 private:
@@ -27,13 +34,32 @@ private:
     FileExecutor* fileExecutor;
     StockContainer* container;
     PriceEstimator* estimator;
+    Settings* settings;
     
 public:
+    //Init a stockCenter if on setting file is assigned
+    //Use default values
     StockCenter(){
-        table = new LookUpTable();
-        fileExecutor = new FileExecutor();
+        settings = new Settings();
+        table = new LookUpTable(settings);
+        fileExecutor = new FileExecutor(settings);
         container = new StockContainer();
-        estimator = new PriceEstimator(container);
+        estimator = new PriceEstimator(container,settings);
+    }
+    
+    //If a setting file is assigned, then use the values in the file
+    StockCenter(string fileName){
+        settings = new Settings(fileName);
+        table = new LookUpTable(settings);
+        fileExecutor = new FileExecutor(settings);
+        container = new StockContainer();
+        estimator = new PriceEstimator(container,settings);
+    }
+    
+    //Change a setting file, will change all the setting values
+    //@Parameter: fileName is the name of the new setting file
+    void addSettingFile(string fileName){
+        settings->setSettingsFile(fileName);
     }
     
     //Get the valid stock symbol from the user input
@@ -51,7 +77,7 @@ public:
     //The stock symbol must be valid!!
     //Return the fileName of the downloaded csv file
     //@Parameter: symbol is the valid stock symbol
-    string openStock(string symbol){
+    string downloadStock(string symbol){
         string filePath = fileExecutor->downloadFile(symbol);
         return filePath;
     }
@@ -61,6 +87,23 @@ public:
     //@Prameter: fileName should be the name of the assigned csv file
     void createStock(string symbol, string fileName){
         container->saveStock(new Stock(symbol,fileName));
+    }
+    
+    //This method does the following tasks:
+    //1. Download the csv file online
+    //2. Parse the csv file
+    //3. Create a stock object and save it
+    //@Parameter: symbol is the valid symbol of a stock
+    void openStock(string symbol){
+        string filePath = fileExecutor -> downloadFile(symbol);
+        container->saveStock(new Stock(symbol,filePath));
+    }
+    
+    //Remove the stock from the vector
+    //If the stock does not exist, it will print out message
+    //@Parameter: symbol is the valid symbol of a stock
+    void removeStock(string symbol){
+        container->removeStock(symbol);
     }
     
     //Print out the information of all saved stocks
@@ -80,6 +123,30 @@ public:
     //@Parameter: stockSymbol is the valid stock symbol
     string getTradeSuggestion(string stockSymbol){
         return estimator->getTradeSuggestions(stockSymbol);
+    }
+    
+    //Return a vector of historical prices
+    //If the stock could not found, then an empty vector will be returned
+    //@Parameter: symbol is the valid stock symbol
+    vector<double> getPriceTable(string symbol){
+        return container->getPriceTable(symbol);
+    }
+    
+    //Return the close price of tha assigned stock on the assigned day
+    //If either the stock symbol or the date is invalid, then return -1
+    //@Parameter: symbol is the valid stock symbol
+    //@Parameter: date should be in format mm-dd-yy (1-15-14)
+    double getPriceOfDay(string symbol, string date){
+        return container->getPriceOfDay(symbol, date);
+    }
+    
+    
+    //Return a vector of <time,price> pairs of the assigned stock
+    //The time is in the format mm-dd-yy, for example 1-4-13
+    //The price is in double
+    //@Parameter: symbol is the valid stock symbol
+    vector<Pair*> getStockHistory(string symbol){
+        return container->getStockHistory(symbol);
     }
     
 };
