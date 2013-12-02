@@ -71,6 +71,8 @@ public:
         return table->getProximitySymbols(input);
     }
     
+    
+    
     //Download the csv file of the assgined stock from Internet
     //The csv file is downloaded to the current project directory
     //Internet connection is required here
@@ -81,6 +83,7 @@ public:
         string filePath = fileExecutor->downloadFile(symbol);
         return filePath;
     }
+    //Q: I wonder that at what time the user download stock information while running our program? **************  
     
     //Parse the stock csv file and store the historical stock statistics
     //@Parameter: symbol should be valid stock symbol
@@ -88,6 +91,8 @@ public:
     void createStock(string symbol, string fileName){
         container->saveStock(new Stock(symbol,fileName));
     }
+    //Q: the same with the last question, when should we use this function in designing the GUI? ***********************
+    
     
     //This method does the following tasks:
     //1. Download the csv file online
@@ -110,6 +115,8 @@ public:
     void printAllStocks(){
         container->printAllStocks();
     }
+    //Q: I don't know how to use this function? Where can we print it?****************************
+    
     
     //Get the estimated future prices of the assigned days
     //Return the prices in the vector, where the price of earlier day is in the front
@@ -118,6 +125,8 @@ public:
     vector<double> getFuturePrices(string stockSymbol, int numberOfDays){
         return estimator->getFuturePrice(stockSymbol, numberOfDays);
     }
+    //Q: We didn't discuss it today. Where should we put this information?***************************
+    
     
     //Get the estimated future prices of the assigned days
     //Return the pairs of <day,price>.
@@ -139,6 +148,7 @@ public:
     vector<double> getPriceTable(string symbol){
         return container->getPriceTable(symbol);
     }
+    //Q: Does 'historical prices' means close price or other type of prices? *********************
     
     //Return the close price of tha assigned stock on the assigned day
     //If either the stock symbol or the date is invalid, then return -1
@@ -148,6 +158,7 @@ public:
         return container->getPriceOfDay(symbol, date);
     }
     
+<<<<<<< HEAD
     double getVolumeOfDay(string symbol, string date){
         return container->getVolumnOfDay(symbol, date);
     }
@@ -169,6 +180,8 @@ public:
     }
     
     
+=======
+>>>>>>> 2382a267454c711d2c8ebe79446028a097912d3e
     //Return a vector of <time,price> pairs of the assigned stock
     //The time is in the format mm-dd-yy, for example 1-4-13
     //The price is in double
@@ -176,8 +189,8 @@ public:
     vector<Pair*> getStockHistory(string symbol){
         return container->getStockHistory(symbol);
     }
-    
-};
+   //Q:Here you use the item "history", does it get the data of days throughout the history or a certain day?*************************
+}; 
 
 
 #endif
