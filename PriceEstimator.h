@@ -12,6 +12,7 @@
 #include "StockContainer.h"
 #include "Stock.h"
 #include "Settings.h"
+#include "Pair.h"
 
 using namespace std;
 
@@ -158,6 +159,30 @@ public:
         return futurePrices;
     }
     
+    vector<Pair*> getFuturePrices(string stockSymbol, int numOfDays){
+        Stock* stock = stockContainer->getStock(stockSymbol);
+        vector<double> priceTable = stock->getPriceTable();
+        //Get the coeffients. Here the vector should only contain four elements
+        vector<double> coefficients = estimatePrice(priceTable);
+        //Calculate the future prices
+        vector<double> futurePrices = calculateFuturePrice(priceTable,coefficients,numOfDays);
+        
+        vector<Time*> futureTimes;
+        Time* current= stock->getLastTimeInHistory();
+        vector<Pair*> result;
+        
+        for(int i=0; i<numOfDays; i++){
+            current = current->getTomorrow();
+            futureTimes.push_back(current);
+        }
+        
+        for(int i=0; i<numOfDays; i++){
+            result.push_back(new Pair(futureTimes[i],futurePrices[i]));
+        }
+        
+        return result;
+    }
+
     //Get Trade Suggestions
     //Compare the the latest price with the price of next day
     string getTradeSuggestions(string stockSymbol){

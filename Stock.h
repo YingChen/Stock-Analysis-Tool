@@ -46,12 +46,27 @@ private:
         }
         return result;
     }
+    
+    Time* parseTime(string input){
+        vector<string> splittedDateInfo = split(input, '-');
+        int month = atoi(splittedDateInfo[0].c_str());
+        int day = atoi(splittedDateInfo[1].c_str());
+        int year = atoi(splittedDateInfo[2].c_str());
+        Time* date = new Time(year,month,day);
+        return date;
+    }
 
 public:
     Stock(string name , string filePath){
         this->name = name;
         myParser = new CSVParser(filePath);
         createHistory();
+    }
+    
+    //Get the last day time
+    Time* getLastTimeInHistory(){
+        int len = (int) history.size();
+        return history[len-1]->getTime();
     }
     
     //Print all the information of the current stock
@@ -82,11 +97,7 @@ public:
     //For example: 1-4-14
     //If no such date is found, then return -1.
     double getPriceOfTheDay(string dateInfo){
-        vector<string> splittedDateInfo = split(dateInfo, '-');
-        int month = atoi(splittedDateInfo[0].c_str());
-        int day = atoi(splittedDateInfo[1].c_str());
-        int year = atoi(splittedDateInfo[2].c_str());
-        Time* date = new Time(year,month,day);
+        Time* date = parseTime(dateInfo);
         
         for(int i=0; i<history.size(); i++){
                 if(history[i]->getTime()->equalTo(date))
@@ -94,6 +105,57 @@ public:
         }
         return -1;
     }
+    
+    double getVolumeOfTheDay(string dateInfo){
+        Time* date = parseTime(dateInfo);
+        
+        for(int i=0; i<history.size(); i++){
+            if(history[i]->getTime()->equalTo(date))
+                return history[i]->getVolume();
+        }
+        return -1;
+    }
+    
+    double getOpenPriceOfTheDay(string dateInfo){
+        Time* date = parseTime(dateInfo);
+        
+        for(int i=0; i<history.size(); i++){
+            if(history[i]->getTime()->equalTo(date))
+                return history[i]->getOpenPrice();
+        }
+        return -1;
+    }
+    
+    double getClosePriceOfTheDay(string dateInfo){
+        Time* date = parseTime(dateInfo);
+        
+        for(int i=0; i<history.size(); i++){
+            if(history[i]->getTime()->equalTo(date))
+                return history[i]->getClosePrice();
+        }
+        return -1;
+    }
+    
+    double getHighPriceOfTheDay(string dateInfo){
+        Time* date = parseTime(dateInfo);
+        
+        for(int i=0; i<history.size(); i++){
+            if(history[i]->getTime()->equalTo(date))
+                return history[i]->getHighPrice();
+        }
+        return -1;
+    }
+    
+    double getLowPriceOfTheDay(string dateInfo){
+        Time* date = parseTime(dateInfo);
+        
+        for(int i=0; i<history.size(); i++){
+            if(history[i]->getTime()->equalTo(date))
+                return history[i]->getLowPrice();
+        }
+        return -1;
+    }
+    
     
     vector<Pair*> getStockHistory(){
         vector<Pair*> result;

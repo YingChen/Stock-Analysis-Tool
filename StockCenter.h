@@ -119,6 +119,14 @@ public:
         return estimator->getFuturePrice(stockSymbol, numberOfDays);
     }
     
+    //Get the estimated future prices of the assigned days
+    //Return the pairs of <day,price>.
+    //@Parameter: stockSymbol is the valid stock symbol
+    //@Parameter: numberOfDays is the number of future prices to estimate
+    vector<Pair*> getFuturePricesTable(string stockSymbol, int numberOfDays){
+        return estimator->getFuturePrices(stockSymbol, numberOfDays);
+    }
+    
     //Return the suggestion for trading or keeping the assigned stock
     //@Parameter: stockSymbol is the valid stock symbol
     string getTradeSuggestion(string stockSymbol){
@@ -138,6 +146,26 @@ public:
     //@Parameter: date should be in format mm-dd-yy (1-15-14)
     double getPriceOfDay(string symbol, string date){
         return container->getPriceOfDay(symbol, date);
+    }
+    
+    double getVolumeOfDay(string symbol, string date){
+        return container->getVolumnOfDay(symbol, date);
+    }
+    
+    double getOpenPriceOfDay(string symbol, string date){
+        return container->getOpenPriceOfDay(symbol, date);
+    }
+    
+    double getClosePriceOfDay(string symbol, string date){
+        return container->getClosePriceOfDay(symbol, date);
+    }
+    
+    double getHighPriceOfDay(string symbol, string date){
+        return container->getHighPriceOfDay(symbol, date);
+    }
+    
+    double getLowPriceOfDay(string symbol, string date){
+        return container->getLowPriceOfDay(symbol, date);
     }
     
     

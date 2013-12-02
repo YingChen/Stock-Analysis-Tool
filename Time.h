@@ -64,6 +64,14 @@ private:
         return result;
     }
     
+    int getDayOfThisMonth(int month){
+        if(month==1 || month==3 || month==5 || month==7 || month==8 || month==10 || month ==12)
+            return 31;
+        else if(month==4 || month ==6 || month == 9 || month ==11)
+            return 30;
+        else
+            return 28;
+    }
     
     
 public:
@@ -110,6 +118,30 @@ public:
     //Tell if the current Time is in the range of {first, second}.
     bool inThisRange(Time* first, Time* second){
         return (this->compareTo(first) >= 0) && (this->compareTo(second) <=0);
+    }
+    
+    Time* getTomorrow(){
+        int day = this->day + 1;
+        int dayOfMonth = getDayOfThisMonth(this->month);
+        int carry = 0;
+        if(day > dayOfMonth){
+            day = day - dayOfMonth;
+            carry = 1;
+        }
+        
+        int month = this->month + carry;
+        if(month > 12){
+            month = month -12;
+            carry = 1;
+        }
+        else{
+            carry = 0;
+        }
+        
+        int year = this->year + carry;
+        
+        return new Time(year,month,day);
+        
     }
     
 };

@@ -78,6 +78,41 @@ public:
         return -1;
     }
     
+    double getVolumnOfDay(string symbol, string date){
+        Stock* stock = this->getStock(symbol);
+        if(stock != NULL)
+            return stock->getVolumeOfTheDay(date);
+        return -1;
+    }
+    
+    double getOpenPriceOfDay(string symbol, string date){
+        Stock* stock = this->getStock(symbol);
+        if(stock != NULL)
+            return stock->getOpenPriceOfTheDay(date);
+        return -1;
+    }
+    
+    double getClosePriceOfDay(string symbol, string date){
+        Stock* stock = this->getStock(symbol);
+        if(stock != NULL)
+            return stock->getClosePriceOfTheDay(date);
+        return -1;
+    }
+    
+    double getHighPriceOfDay(string symbol, string date){
+        Stock* stock = this->getStock(symbol);
+        if(stock != NULL)
+            return stock->getHighPriceOfTheDay(date);
+        return -1;
+    }
+    
+    double getLowPriceOfDay(string symbol, string date){
+        Stock* stock = this->getStock(symbol);
+        if(stock != NULL)
+            return stock->getLowPriceOfTheDay(date);
+        return -1;
+    }
+
     vector<Pair*> getStockHistory(string symbol){
         Stock* stock = this->getStock(symbol);
         return stock->getStockHistory();

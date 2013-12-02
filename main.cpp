@@ -72,6 +72,12 @@ int main(int argc, const char * argv[])
             cout<<futurePrices[i]<<endl;
         }
     
+        vector<Pair*> future = center->getFuturePricesTable(validSymbol, numberOfDays);
+        for(int i=0; i<numberOfDays; i++){
+            Pair* pair = future[i];
+            cout<<pair->getTime()<<" "<<pair->getPrice()<<endl;
+        }
+    
         //Get the suggestion
         cout<<center->getTradeSuggestion(validSymbol)<<endl;
 
