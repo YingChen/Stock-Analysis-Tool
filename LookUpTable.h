@@ -109,7 +109,10 @@ public:
         return symbols[index];
     }
     
-        
+    vector<string> getAllStockSymbols(){
+        return symbols;
+    }
+    
 };
 
 #endif

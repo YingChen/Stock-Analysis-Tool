@@ -65,8 +65,8 @@ public:
     
     //Get the last day time
     Time* getLastTimeInHistory(){
-        int len = (int) history.size();
-        return history[len-1]->getTime();
+        //int len = (int) history.size();
+        return history[0]->getTime();
     }
     
     //Print all the information of the current stock
